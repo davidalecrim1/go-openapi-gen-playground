@@ -1,0 +1,137 @@
+# Created with ChatGPT
+openapi: 3.1.0
+info:
+  title: To-Do API
+  description: A simple API for managing To-Do items.
+  version: 1.0.0
+servers:
+  - url: https://api.todoapp.com/v1
+    description: Production server
+  - url: http://localhost:3000/v1
+    description: Development server
+paths:
+  /todos:
+    get:
+      summary: Get all To-Do items
+      description: Retrieve a list of all To-Do items.
+      responses:
+        "200":
+          description: A list of To-Do items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Todo"
+    post:
+      summary: Create a new To-Do item
+      description: Add a new item to the To-Do list.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewTodo"
+      responses:
+        "201":
+          description: To-Do item created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Todo"
+  /todos/{id}:
+    get:
+      summary: Get a specific To-Do item
+      description: Retrieve a To-Do item by its ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the To-Do item
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A single To-Do item.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Todo"
+        "404":
+          description: To-Do item not found.
+    put:
+      summary: Update a specific To-Do item
+      description: Update the details of a To-Do item by its ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the To-Do item
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewTodo"
+      responses:
+        "200":
+          description: To-Do item updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Todo"
+        "404":
+          description: To-Do item not found.
+    delete:
+      summary: Delete a specific To-Do item
+      description: Remove a To-Do item by its ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the To-Do item
+          schema:
+            type: string
+      responses:
+        "204":
+          description: To-Do item deleted.
+        "404":
+          description: To-Do item not found.
+components:
+  schemas:
+    Todo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the To-Do item.
+        title:
+          type: string
+          description: The title of the To-Do item.
+        description:
+          type: string
+          description: Additional details about the To-Do item.
+        completed:
+          type: boolean
+          description: Whether the To-Do item is completed.
+      required:
+        - id
+        - title
+        - completed
+    NewTodo:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the To-Do item.
+        description:
+          type: string
+          description: Additional details about the To-Do item.
+        completed:
+          type: boolean
+          description: Whether the To-Do item is completed.
+      required:
+        - title
+        - completed
