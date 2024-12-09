@@ -19,6 +19,7 @@ var ptr = func(s string) *string { return &s }
 func (t TodoAPI) GetTodos(w http.ResponseWriter, r *http.Request) *generated.Response {
 	return generated.GetTodosJSON500Response(
 		generated.ErrorResponse{
+			Code:  500,
 			Error: "Internal Server Error",
 		},
 	)

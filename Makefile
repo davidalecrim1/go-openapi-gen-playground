@@ -15,4 +15,10 @@ goapi-gen-spec:
 	@goapi-gen --package generated -o internal/api/generated/todo.gen.go internal/api/openapi.yaml && \
 	echo "Successfully completed!"
 
+run:
+	go run ./cmd/api/main.go
+
+healthz:
+	curl -v http://localhost:8080/todos
+
 .PHONY: goapi-gen-spec
