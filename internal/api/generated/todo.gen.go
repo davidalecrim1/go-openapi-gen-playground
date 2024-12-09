@@ -21,6 +21,15 @@ import (
 	"github.com/go-chi/render"
 )
 
+// ErrorResponse defines model for ErrorResponse.
+type ErrorResponse struct {
+	// The HTTP status code.
+	Code int `json:"code"`
+
+	// A short description of the error.
+	Error string `json:"error"`
+}
+
 // NewTodo defines model for NewTodo.
 type NewTodo struct {
 	// Whether the To-Do item is completed.
@@ -121,12 +130,42 @@ func GetTodosJSON200Response(body []Todo) *Response {
 	}
 }
 
+// GetTodosJSON500Response is a constructor method for a GetTodos response.
+// A *Response is returned with the configured status code and content type from the spec.
+func GetTodosJSON500Response(body ErrorResponse) *Response {
+	return &Response{
+		body:        body,
+		Code:        500,
+		contentType: "application/json",
+	}
+}
+
 // PostTodosJSON201Response is a constructor method for a PostTodos response.
 // A *Response is returned with the configured status code and content type from the spec.
 func PostTodosJSON201Response(body Todo) *Response {
 	return &Response{
 		body:        body,
 		Code:        201,
+		contentType: "application/json",
+	}
+}
+
+// PostTodosJSON500Response is a constructor method for a PostTodos response.
+// A *Response is returned with the configured status code and content type from the spec.
+func PostTodosJSON500Response(body ErrorResponse) *Response {
+	return &Response{
+		body:        body,
+		Code:        500,
+		contentType: "application/json",
+	}
+}
+
+// DeleteTodosIDJSON500Response is a constructor method for a DeleteTodosID response.
+// A *Response is returned with the configured status code and content type from the spec.
+func DeleteTodosIDJSON500Response(body ErrorResponse) *Response {
+	return &Response{
+		body:        body,
+		Code:        500,
 		contentType: "application/json",
 	}
 }
@@ -141,12 +180,32 @@ func GetTodosIDJSON200Response(body Todo) *Response {
 	}
 }
 
+// GetTodosIDJSON500Response is a constructor method for a GetTodosID response.
+// A *Response is returned with the configured status code and content type from the spec.
+func GetTodosIDJSON500Response(body ErrorResponse) *Response {
+	return &Response{
+		body:        body,
+		Code:        500,
+		contentType: "application/json",
+	}
+}
+
 // PutTodosIDJSON200Response is a constructor method for a PutTodosID response.
 // A *Response is returned with the configured status code and content type from the spec.
 func PutTodosIDJSON200Response(body Todo) *Response {
 	return &Response{
 		body:        body,
 		Code:        200,
+		contentType: "application/json",
+	}
+}
+
+// PutTodosIDJSON500Response is a constructor method for a PutTodosID response.
+// A *Response is returned with the configured status code and content type from the spec.
+func PutTodosIDJSON500Response(body ErrorResponse) *Response {
+	return &Response{
+		body:        body,
+		Code:        500,
 		contentType: "application/json",
 	}
 }
@@ -435,19 +494,20 @@ func WithErrorHandler(handler func(w http.ResponseWriter, r *http.Request, err e
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/9xVT2/bPgz9KgJ/v6NnO2tPvnULMOQyBEOKHYoeFJuJVdiiKtEpgsLffZCcv7a7dui2",
-	"FrvJtvhIvvdIP0JOtSGNmh1kj+DyEmsZjl/xYUEF+aOxZNCywvDBR1TIWPiHAl1ulWFFGjL4XiKXaAWX",
-	"KBb0YUpCMdZCOXEIiiEC3hqEDJZEFUoNbXQO00e9Kgrlj7ISBbJUlRNySQ330pwgO7ZKrz0wK65wCLko",
-	"UYRPglbPw7QRWLxvlPU93+wwoxMibg8htLzDnH3mf4A8NVLltVb3DQpVoGa1UmjFiuxbKaEKiF4khw9U",
-	"ekUj/AinfJy4ms9CK7XUcq30+qQQFx/SZNC9vprPIIINWtfBTOI0Tn2bZFBLoyCDi3gSpxCBkVwG7ROm",
-	"gsJpjTys5BuyVbhBIUWlHHs+ZFX1y/Bmkj5iVkAGX5AXAdTz4gxp19nsY5p2btOMOuSSxlQqD5HJneuc",
-	"0k27PwV4f/jf4goy+C857oVktxSS4Oj2wK20Vm47avuU7us/q91fdE1dS7vtKu+357ENOR41sZBC40M3",
-	"EkwnTvG5hsTMyZ0wc9+g409UbH+JlJ9xsd+O7bkl2TbYDrSY/La0x5y9KTrui9yiDKvinO/P4fWOxeP1",
-	"cKszZvKoirbj3o/RmEFrCvY8ybbcCsVOzKZDCaYBJogwm4Y5sLJGRusgu+ljz6bD+Qc/s5CFAYIItKy9",
-	"7cLMnzMenbDXXxi3AzUuR5bQsaGueU9fBJfP3NXEYkWNHpDdtS6kcAZztVL5GePRs/P/MoL3w/+u2E3/",
-	"uNf9xtbr6vxP8Rq1wip6SirTjEh1bQo/TJ7Q/U/Vb+sX6jZv3odub7wV07+5FZug2CvHeif7E14Jd9Fu",
-	"xqWcWyqa3D+I7hJE0NgKMiiZjcuSRBoV+0UsjYlzqpPNBNqoDzPFDVZkatQ8hpMlSUW5rEpynF2kaRpQ",
-	"btsfAQAA//8Q8uU76AsAAA==",
+	"H4sIAAAAAAAC/9xXwY7bNhD9FWLao2ppm/Si27YuWl8KI3XQQ7AHrji2GEgcLjlyYCz07wVJey1L2mQL",
+	"pI27N4ImZ97Me/MoP0JFrSWDhj2Uj+CrGlsZl786R+4dekvGY9iwjiw61hh/rkjFXYW+ctqyJgMlbGoU",
+	"v282a+FZcudFOLWADPhgEUrQhnGHDvoMMISfBrgVvibHYrAraCu4RhFvDIJ5dtrsoO8zcPjQaYcKyg/H",
+	"wFkCePd0mu4/YsUh8x/4aUOK5kpqbYMcwoxh/VUj1+gijg39sCShGVuhQ4XHSwNk90QNShOSXYSZFKuU",
+	"DkvZCIUsdeOFvKeOR2lmas6ANTfPEBB/OnXts2FGrUsxs0Ej5vr3CpqnZ1C+N/qhQ6EVGtZbjU5syX0r",
+	"JrSC7EV0hIvabGl2knS4J27Xq1hKK43cabMbAPGLpzQlpO3b9Qoy2KPzKczNolgUoUyyaKTVUMKbxc2i",
+	"gAys5DpynzMpiqsd8hTJO2SncY9CikZ7Dv2QTTOGEcQkw42VghJ+Q97EoKEvyYNigh+LIqnNMJqYS1rb",
+	"6CrezD/6pJRkY2EVw4fF9w63UMJ3+dnw8qPb5VHR/VNvpXPykFo7bukJ/wX2PoOf/iGsz6G5NN4ZGCvD",
+	"6ILu/0S3RyfihSgh37WtdIfUv3GTA05LnmdHSUhh8FMaTKaBXkPFU3rW5Af8PHTo+WdSh6/Wg5NH95eD",
+	"wa7DfqKIm6+W9pxzNMtn16ocymhY18j6LxHckcsz6HgqDWn+qFWfFBAsZW5YW4qjOqj5/iA0e7FaToWw",
+	"jGGiFFbL6AlOtsjoPJQfxrFXy6kXQvAvKKOZQAZGtvFDQcGY92zQyLF53k008XbGkM8FpeITiW+/cNYQ",
+	"iy115kopTwQIKbzFSm91dcF79kVHfhnNJzu+Ko6Lf33uwxtqds3l2/3/10x8HJ4TjO1mBPPeqmAsgdbT",
+	"x1Z4xV+onnV3Her5xu9U8V++U11k7FVY3FF8zyg2no2X5wS1dqS6Kv6NTIcgg841UELNbH2Z59LqRXga",
+	"pbWLitp8fwN9Ng6zxD02ZFs0PBenzPOGKtnU5Ll8UxRFjHLX/x0AAP//M+TR6F8PAAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
